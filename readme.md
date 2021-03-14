@@ -32,11 +32,11 @@ From simple benchmarks like AND and XOR these layers seem to do well. There are 
 
 AND
 
-![image-20210314014741655](img\image-20210314014741655.png)
+![image-20210314014741655](img/image-20210314014741655.png)
 
 XOR
 
-![image-20210314014821809](img\image-20210314014821809.png)
+![image-20210314014821809](img/image-20210314014821809.png)
 
 Obviously a accuracy vs epoch curve would be better and some other benchmarks, but for now this is only a proof of concept.
 
