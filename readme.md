@@ -47,4 +47,4 @@ Obviously a accuracy vs epoch curve would be better and some other benchmarks, b
 - Better weight initialization
 - Different kernel
   - The current distance kernel creates a chi squared distribution which could affect either other instances of this layer or dense layers
-
+- Mean normal invserse distance.
