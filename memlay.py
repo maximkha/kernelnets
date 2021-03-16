@@ -29,7 +29,9 @@ class MemLayer(nn.Module):
         # wx = ((x - self.weights)**2).mean(dim=1)
         # print("X--")
         # print(x)
-        wx = ((x.unsqueeze(0) - self.weights.unsqueeze(1))**2).mean(axis=-1).squeeze(1)
+        
+        wx = -((x.unsqueeze(0) - self.weights.unsqueeze(1))**2).mean(axis=-1).squeeze(1)
+        
         # wx = ((x.unsqueeze(0) - self.weights.unsqueeze(1)).abs()).mean(axis=-1).squeeze(1) # WORSE
         # wx = (torch.relu(x.unsqueeze(0) - self.weights.unsqueeze(1))).mean(axis=-1).squeeze(1) # NOT SUPER GOOD
         # wx = (torch.hardshrink(x.unsqueeze(0) - self.weights.unsqueeze(1))).mean(axis=-1).squeeze(1)
@@ -39,6 +41,14 @@ class MemLayer(nn.Module):
         # print(x.unsqueeze(0) - self.weights.unsqueeze(1))
         # print("BIA--")
         # print(torch.add(wx, self.bias))
-        if self.usebias: wx = torch.add(wx, self.bias)
+        
+        #print(x.shape)
+        #print(wx.transpose(0,1).shape)
+        #print(self.bias.shape)
+
+        # norm = torch.distributions.normal.Normal(0,1)
+        # wx = (1-((norm.cdf(x.unsqueeze(0) - self.weights.unsqueeze(1))-.5).abs())*2).mean(axis=-1).squeeze(1) # ((x.unsqueeze(0) - self.weights.unsqueeze(1)).squeeze(1)
+        
+        if self.usebias: wx = torch.add(wx.transpose(0,1), self.bias)
         return wx
 

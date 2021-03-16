@@ -9,8 +9,8 @@ torch.manual_seed(2)
 import memlay
 
 X = torch.Tensor([[0,0],[0,1], [1,0], [1,1]])
-Y = torch.Tensor([0,1,1,0]).view(-1,1)
-#Y = torch.Tensor([0,0,0,1]).view(-1,1)
+#Y = torch.Tensor([0,1,1,0]).view(-1,1)
+Y = torch.Tensor([0,0,0,1]).view(-1,1)
 
 class XORNet(nn.Module):
     def __init__(self, input_dim = 2, output_dim=1):
