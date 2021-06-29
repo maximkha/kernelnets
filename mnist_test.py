@@ -32,6 +32,7 @@ import memlay
 
 model = nn.Sequential(memlay.MemLayer(input_size, hidden_sizes[0]),
                       memlay.MemLayer(hidden_sizes[0], hidden_sizes[1]),
+                      memlay.MemLayer(hidden_sizes[1], hidden_sizes[1]),
                       memlay.MemLayer(hidden_sizes[1], output_size),
                       nn.LogSoftmax(dim=1))
 print(model)
@@ -43,30 +44,34 @@ images = images.view(images.shape[0], -1)
 logps = model(images) #log probabilities
 loss = criterion(logps, labels) #calculate the NLL loss
 
-optimizer = optim.SGD(model.parameters(), lr=0.003, momentum=0.9)
+optimizer = optim.Adam(model.parameters(), lr=0.002) #optim.SGD(model.parameters(), lr=0.003, momentum=0.9)
 time0 = time()
 epochs = 15
 for e in range(epochs):
-    running_loss = 0
-    for images, labels in trainloader:
-        # Flatten MNIST images into a 784 long vector
-        images = images.view(images.shape[0], -1)
-    
-        # Training pass
-        optimizer.zero_grad()
-        
-        output = model(images)
-        loss = criterion(output, labels)
-        
-        #This is where the model learns by backpropagating
-        loss.backward()
-        
-        #And optimizes its weights here
-        optimizer.step()
-        
-        running_loss += loss.item()
-    else:
-        print("Epoch {} - Training loss: {}".format(e, running_loss/len(trainloader)))
+  running_loss = 0
+  
+  bcount = 0
+  for images, labels in trainloader:
+      print(f"batch {(bcount := bcount + 1)}")
+      # Flatten MNIST images into a 784 long vector
+      images = images.view(images.shape[0], -1)
+      # print(images.shape)
+      # exit()
+  
+      # Training pass
+      optimizer.zero_grad()
+      
+      output = model(images)
+      loss = criterion(output, labels)
+      
+      #This is where the model learns by backpropagating
+      loss.backward()
+      
+      #And optimizes its weights here
+      optimizer.step()
+      
+      running_loss += loss.item()
+  print("Epoch {} - Training loss: {}".format(e, running_loss/len(trainloader)))
 print("\nTraining Time (in minutes) =",(time()-time0)/60)
 
 correct_count, all_count = 0, 0
